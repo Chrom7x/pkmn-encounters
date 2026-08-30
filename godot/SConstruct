@@ -1,0 +1,27 @@
+# Build de la GDExtension. Requiere godot-cpp como submódulo en ./godot-cpp
+#   cd godot
+#   git clone -b 4.3 https://github.com/godotengine/godot-cpp
+#   scons target=template_debug
+#
+# La .dll/.so resultante va a ../demo_project/bin/ (ver encounters.gdextension).
+
+import os
+
+env = SConscript("godot-cpp/SConstruct")
+
+env.Append(CPPPATH=["../include", "."])
+sources = ["register_types.cpp", "random_encounters.cpp", "../src/encounter_system.cpp"]
+
+libname = "libencounters"
+outdir = "../demo_project/bin/"
+
+if env["platform"] == "macos":
+    target = "{}{}/{}.{}.{}.framework/{}.{}.{}".format(
+        outdir, libname, libname, env["platform"], env["target"],
+        libname, env["platform"], env["target"])
+else:
+    target = "{}{}{}{}".format(outdir, libname,
+                               env["suffix"], env["SHLIBSUFFIX"])
+
+library = env.SharedLibrary(target, source=sources)
+Default(library)

@@ -1,0 +1,26 @@
+# Build
+build/
+cmake-build-*/
+out/
+
+# Godot / godot-cpp
+godot/godot-cpp/
+godot/demo_project/bin/*.dll
+godot/demo_project/bin/*.so
+godot/demo_project/bin/*.dylib
+godot/demo_project/bin/*.framework/
+godot/.sconsign.dblite
+*.os
+*.obj
+*.o
+*.a
+*.lib
+*.exp
+*.pdb
+*.ilk
+
+# Editores
+.vs/
+.vscode/
+.idea/
+*.user
