@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="MoveData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/move_data.gd" id="1_move"]
+
+[resource]
+script = ExtResource("1_move")
+display_name = "Pistola Agua"
+description = "Dispara agua a presión contra el objetivo."
+type = 2
+category = 1
+target = 0
+power = 40
+accuracy = 100
+max_pp = 25
+priority = 0
+makes_contact = false
+high_crit_ratio = false
+effect_chance = 100

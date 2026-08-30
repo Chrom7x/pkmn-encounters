@@ -1,0 +1,14 @@
+; Proyecto Godot 4 mínimo para el sistema de combate.
+; Ábrelo con Godot 4.3+ o copia la carpeta scripts/ a tu propio proyecto.
+
+config_version=5
+
+[application]
+
+config/name="Pkmn Fan Game — Sistema de combate"
+config/features=PackedStringArray("4.3")
+run/main_scene=""
+
+[debug]
+
+gdscript/warnings/untyped_declaration=1

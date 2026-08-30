@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="MoveData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/move_data.gd" id="1_move"]
+[ext_resource type="Script" path="res://scripts/data/move_effect.gd" id="2_fx"]
+
+[sub_resource type="Resource" id="MoveEffect_lower_atk"]
+script = ExtResource("2_fx")
+kind = 2
+status = 0
+stat = 1
+stages = -1
+fraction = 0.0
+target_self = false
+
+[resource]
+script = ExtResource("1_move")
+display_name = "Gruñido"
+description = "El usuario gruñe y baja el Ataque del objetivo."
+type = 0
+category = 2
+target = 0
+power = 0
+accuracy = 100
+max_pp = 40
+priority = 0
+makes_contact = false
+high_crit_ratio = false
+effect = SubResource("MoveEffect_lower_atk")
+effect_chance = 100

@@ -1,6 +1,17 @@
 # pkmn-encounters
 
-Sistema de **encuentros aleatorios estilo Pokémon** en C++17, sin dependencias
+Repositorio con dos sistemas para un fan game estilo Pokémon:
+
+1. **Encuentros aleatorios** — C++17, sin dependencias, agnóstico del motor
+   (`include/` + `src/`, con GDExtension para Godot 4 en `godot/`).
+2. **Combate** — GDScript (Godot 4): tipos, físico/especial, escalado de stats,
+   daño y curvas de nivel. Ver [`godot/combat_system/`](godot/combat_system/COMBAT.md).
+
+---
+
+## 1) Encuentros aleatorios (C++)
+
+Sistema de encuentros aleatorios estilo Pokémon en C++17, sin dependencias
 externas y **agnóstico del motor**. El núcleo (`include/` + `src/`) compila en
 cualquier sitio; en `godot/` hay una GDExtension lista para Godot 4.
 
@@ -100,3 +111,26 @@ Por cada `step()` sobre una casilla de encuentro:
 5. Nivel aleatorio uniforme en `[min_level, max_level]`.
 6. Si el repelente está activo y `nivel < repel_level` → se anula el combate.
 7. Combate: se emite el resultado y se reinicia el contador de gracia.
+
+---
+
+## 2) Combate (GDScript / Godot 4)
+
+Carpeta [`godot/combat_system/`](godot/combat_system/) — proyecto Godot 4.3
+independiente (GDScript puro, sin la GDExtension). Cubre:
+
+- **Tipos:** enum `PokeTypes.Type` con los 18 tipos oficiales + tabla de
+  efectividad completa. Cada `MoveData` tiene **un único** tipo.
+- **Físico vs Especial:** `MoveData.Category`. El daño escala con Ataque o
+  Ataque Especial del atacante y se mitiga con la Defensa o Defensa Especial
+  correspondiente del objetivo (`DamageCalculator`).
+- **Escalado de stats:** `StatCalculator` con la fórmula Gen III+ (base, IV, EV,
+  naturaleza) y stages −6…+6 en combate.
+- **Nivel y EXP:** `GrowthRate` implementa las **6 curvas clásicas**; `Battler`
+  gestiona la subida de nivel y el aprendizaje de movimientos; `Experience`
+  reparte EXP y EV al derrotar.
+- **Recursos modulares:** `MoveData`, `SpeciesData`, `StatBlock`, `MoveEffect` y
+  `LearnsetEntry` son `Resource`, editables en el inspector. Hay `.tres` de
+  ejemplo en `godot/combat_system/data/moves/`.
+
+Detalle completo y fórmulas en [`godot/combat_system/COMBAT.md`](godot/combat_system/COMBAT.md).

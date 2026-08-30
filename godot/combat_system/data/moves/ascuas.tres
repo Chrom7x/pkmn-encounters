@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="MoveData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/move_data.gd" id="1_move"]
+[ext_resource type="Script" path="res://scripts/data/move_effect.gd" id="2_fx"]
+
+[sub_resource type="Resource" id="MoveEffect_burn"]
+script = ExtResource("2_fx")
+kind = 1
+status = 1
+stat = 1
+stages = 0
+fraction = 0.0
+target_self = false
+
+[resource]
+script = ExtResource("1_move")
+display_name = "Ascuas"
+description = "Lanza llamas débiles. Puede causar quemaduras."
+type = 1
+category = 1
+target = 0
+power = 40
+accuracy = 100
+max_pp = 25
+priority = 0
+makes_contact = false
+high_crit_ratio = false
+effect = SubResource("MoveEffect_burn")
+effect_chance = 10

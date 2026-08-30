@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="MoveData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/move_data.gd" id="1_move"]
+
+[resource]
+script = ExtResource("1_move")
+display_name = "Látigo Cepa"
+description = "Golpea al objetivo con lianas finas como látigos."
+type = 4
+category = 0
+target = 0
+power = 45
+accuracy = 100
+max_pp = 25
+priority = 0
+makes_contact = true
+high_crit_ratio = false
+effect_chance = 100

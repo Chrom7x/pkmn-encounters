@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="MoveData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/move_data.gd" id="1_move"]
+
+[resource]
+script = ExtResource("1_move")
+display_name = "Placaje"
+description = "Un ataque físico básico. Embiste al objetivo con todo el cuerpo."
+type = 0
+category = 0
+target = 0
+power = 40
+accuracy = 100
+max_pp = 35
+priority = 0
+makes_contact = true
+high_crit_ratio = false
+effect_chance = 100
