@@ -22,6 +22,15 @@ signal cutscene_step_started(index: int, step: CutsceneStep)
 ## El jugador/mapa escucha esto para bloquear el control durante cinemáticas.
 signal gameplay_input_locked(locked: bool)
 
+# --- Economía / Centro Pokémon ---------------------------------------------
+signal shop_opened(shop_id: StringName)
+signal shop_closed(shop_id: StringName)
+signal item_bought(item_id: StringName, quantity: int, total_price: int)
+signal item_sold(item_id: StringName, quantity: int, total_price: int)
+signal money_changed(amount: int)
+signal party_heal_started
+signal party_healed
+
 # --- Canal genérico ----------------------------------------------------------
 ## Cualquier acción o paso puede lanzar un evento con nombre y datos libres.
 ## Los sistemas de juego filtran por `id`.

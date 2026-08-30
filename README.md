@@ -141,27 +141,37 @@ Detalle completo y fórmulas en [`godot/combat_system/COMBAT.md`](godot/combat_s
 
 ---
 
-## 3) Diálogos y cinemáticas (GDScript / Godot 4)
+## 3) Diálogos, cinemáticas y tienda (GDScript / Godot 4)
 
 Carpeta [`godot/narrative_system/`](godot/narrative_system/) — proyecto Godot 4.3
-independiente, GDScript puro. Todo gira en torno a 5 autoloads que mantienen los
-sistemas **desacoplados**: `EventBus` (señales globales + canal genérico),
-`Flags` (estado), `GameActions` (registro `id → Callable`), `DialogueManager`,
-`CutsceneManager`.
+independiente, GDScript puro. Autoloads que mantienen los sistemas
+**desacoplados**: `EventBus` (señales globales + canal genérico), `Flags`
+(estado), `GameActions` (registro `id → Callable`), `DialogueManager`,
+`CutsceneManager`, `ItemDatabase`, `Inventory`, `ShopManager`.
 
 - **Diálogos con decisión:** `DialogueData` → `DialogueLine` → `DialogueChoice`
   (todos `Resource`). Cada opción lleva `actions: Array[GameAction]` y una rama
   `next`. Acciones listas: emitir evento, llamar acción registrada (async),
-  activar flag, abrir tienda, curar equipo, teletransportar (Vuelo), lanzar otra
-  cinemática/diálogo. "Rechazar" = opción sin acciones.
+  activar flag, abrir tienda, curar equipo, teletransportar (Vuelo), dar objetos,
+  cambiar dinero, lanzar otra cinemática/diálogo. "Rechazar" = opción sin acciones.
 - **Sequencer de cinemáticas:** `Cutscene` → `Array[CutsceneStep]`. El
   `CutsceneManager` hace `await step.run(ctx)` en orden. Pasos: mover actor,
   mover/zoom cámara, animación, **diálogo con espera de respuesta**, acción,
   emitir evento, bifurcación (`StepBranch`) y paralelo (`StepParallel`).
+- **Tienda / mercado:** `ShopData` → `Array[ShopEntry]` (precio, stock,
+  `require_flag`). `ShopManager` lleva las reglas (`try_buy` / `try_sell`:
+  dinero, stock, hueco en la bolsa, objetos clave) y registra el handler
+  `open_shop`. `Inventory` = dinero + bolsa (con guardado). `ItemData` define
+  cada objeto. `ShopUI` incluida y reemplazable. Comprar desde un NPC = opción
+  de diálogo con `ActionOpenShop`.
+- **Centro Pokémon:** `HealingStation` registra el handler `heal_party`
+  (animación de la máquina + `party_restore` que implementa tu sistema de
+  equipo). El diálogo de la Enfermera Joy usa `ActionHealParty`.
 - **Interacción en el mundo:** `Interactable` (`Area2D`, se le arrastra un
   diálogo o cinemática) + `Interactor` (en el jugador).
-- **UI incluida y reemplazable:** `DialogueUI` se auto-registra; puedes poner la
-  tuya con `DialogueManager.register_ui()`. Sin UI, el diálogo se resuelve solo.
+- **UI incluida y reemplazable:** `DialogueUI` y `ShopUI` se auto-registran;
+  puedes poner las tuyas. Sin UI, todo se resuelve headless (tests).
 
 Estructura de nodos, flujo y guía de extensión en
-[`godot/narrative_system/NARRATIVE.md`](godot/narrative_system/NARRATIVE.md).
+[`NARRATIVE.md`](godot/narrative_system/NARRATIVE.md) y
+[`ECONOMY.md`](godot/narrative_system/ECONOMY.md).

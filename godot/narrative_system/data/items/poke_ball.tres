@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ItemData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/item_data.gd" id="1_item"]
+
+[resource]
+script = ExtResource("1_item")
+id = &"poke_ball"
+display_name = "Poké Ball"
+description = "Dispositivo para capturar Pokémon salvajes."
+category = 1
+buy_price = 200
+sell_price = -1
+max_stack = 99
+consumable = true
+usable_in_field = false
+usable_in_battle = true
+key_item = false
+use_action_id = &"throw_ball"

@@ -1,23 +1,26 @@
-; Proyecto Godot 4 mínimo para el sistema de diálogos + cinemáticas.
-; Ábrelo con Godot 4.3+ o copia autoload/ + scripts/ a tu proyecto y replica
-; la sección [autoload] de abajo.
+; Proyecto Godot 4 mínimo para diálogos + cinemáticas + tienda/mercado.
+; Ábrelo con Godot 4.3+ o copia autoload/ + scripts/ + data/ a tu proyecto y
+; replica esta sección [autoload].
 
 config_version=5
 
 [application]
 
-config/name="Pkmn Fan Game — Diálogos y Cinemáticas"
+config/name="Pkmn Fan Game — Diálogos, Cinemáticas y Tienda"
 config/features=PackedStringArray("4.3")
 run/main_scene=""
 
 [autoload]
 
-; El orden importa: EventBus y Flags no dependen de nadie; los managers sí.
+; El orden importa: primero los que no dependen de nadie.
 EventBus="*res://autoload/event_bus.gd"
 Flags="*res://autoload/flags.gd"
+ItemDatabase="*res://autoload/item_database.gd"
 GameActions="*res://autoload/game_actions.gd"
+Inventory="*res://autoload/inventory.gd"
+ShopManager="*res://autoload/shop_manager.gd"
 DialogueManager="*res://autoload/dialogue_manager.gd"
 CutsceneManager="*res://autoload/cutscene_manager.gd"
 
 ; Las acciones de entrada "interact" y "cutscene_skip" se crean por código en
-; EventBus._ready() si no existen, así el proyecto funciona sin configurarlas.
+; EventBus._ready() si no existen.

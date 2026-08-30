@@ -1,10 +1,16 @@
 class_name ActionOpenShop
 extends GameAction
-## EJEMPLO de acción de juego: abrir una tienda (comprar/vender).
-## Delega en el handler "open_shop". Espera a que la tienda se cierre.
+## Abre una tienda (comprar/vender) y espera a que el jugador la cierre.
+## Ejemplo: opción de diálogo "Ver productos" del dependiente del Poké Mart.
 
-@export var shop_id: StringName = &"default"
+## Arrastra aquí el recurso ShopData de la tienda...
+@export var shop: ShopData
+## ...o, si la tienda está registrada en ShopManager, indica solo su id.
+@export var shop_id: StringName = &""
 
 
 func execute(_ctx: ActionContext) -> void:
-	await GameActions.run(&"open_shop", {"shop_id": shop_id})
+	if shop:
+		await ShopManager.open(shop)
+	elif shop_id != &"":
+		await GameActions.run(&"open_shop", {"shop_id": shop_id})

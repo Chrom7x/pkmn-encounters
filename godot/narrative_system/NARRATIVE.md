@@ -3,9 +3,13 @@
 Arquitectura modular y **desacoplada** para diálogos con decisiones y un
 *sequencer* de cinemáticas/eventos. GDScript puro, sin dependencias.
 
+> **Tienda / Mercado y Centro Pokémon:** están documentados aparte en
+> [ECONOMY.md](ECONOMY.md) (inventario, dinero, comprar/vender, máquina de
+> curar). Se apoyan en la misma arquitectura de abajo.
+
 ## Idea central: nadie se conoce a nadie
 
-Tres autoloads hacen de intermediarios; los sistemas de juego (equipo, tienda,
+Los autoloads hacen de intermediarios; los sistemas de juego (equipo, tienda,
 mapa, cámara) hablan **solo** con ellos:
 
 | Autoload | Rol | Cómo lo usan los sistemas de juego |
@@ -15,16 +19,17 @@ mapa, cámara) hablan **solo** con ellos:
 | `GameActions` | Registro `id -> Callable` (sync o async) | `GameActions.register(&"heal_party", _handler)` |
 | `DialogueManager` | Reproduce un `DialogueData`, devuelve `DialogueResult` | `await DialogueManager.start(data)` |
 | `CutsceneManager` | Ejecuta una `Cutscene` paso a paso con `await` | `await CutsceneManager.play(cutscene, ctx)` |
+| `ItemDatabase` · `Inventory` · `ShopManager` | Objetos, dinero y tiendas | ver [ECONOMY.md](ECONOMY.md) |
 
 Añadir una interacción/tienda/respuesta nueva = **crear un `Resource`** o
 **registrar un handler**. La lógica base no se toca.
 
 ## Instalación
 
-1. Copia `autoload/` y `scripts/` a tu proyecto.
+1. Copia `autoload/`, `scripts/` y `data/` a tu proyecto.
 2. Proyecto → Ajustes → Autoload, en este orden: `EventBus`, `Flags`,
-   `GameActions`, `DialogueManager`, `CutsceneManager` (ya está en el
-   `project.godot` de esta carpeta).
+   `ItemDatabase`, `GameActions`, `Inventory`, `ShopManager`, `DialogueManager`,
+   `CutsceneManager` (ya está en el `project.godot` de esta carpeta).
 3. Añade un nodo con `scripts/ui/dialogue_ui.gd` a tu escena principal (se
    registra solo). O usa tu propia UI (ver más abajo).
 4. Las acciones de entrada `interact` y `cutscene_skip` se crean solas si no
@@ -72,9 +77,11 @@ start(data)
 
 | Ejemplos de juego (envolturas finas) | Delegan en |
 |---|---|
-| `ActionHealParty` | `GameActions.run(&"heal_party", …)` |
-| `ActionOpenShop` | `GameActions.run(&"open_shop", {shop_id})` |
+| `ActionHealParty` | `GameActions.run(&"heal_party", …)` — Centro Pokémon |
+| `ActionOpenShop` | abre una `ShopData` (o `shop_id`) — ver [ECONOMY.md](ECONOMY.md) |
 | `ActionTeleport` | `GameActions.run(&"teleport_player", {destination_id/position})` |
+| `ActionGiveItem` | `Inventory.add_item` / `remove_item` — recompensas, objetos de historia |
+| `ActionChangeMoney` | `Inventory.add_money(amount)` — premios, peajes |
 
 **"Rechazar" no necesita código:** una opción sin `actions` y sin `next`
 simplemente cierra el diálogo.
