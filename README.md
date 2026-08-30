@@ -1,11 +1,15 @@
 # pkmn-encounters
 
-Repositorio con dos sistemas para un fan game estilo Pokémon:
+Repositorio con varios sistemas para un fan game estilo Pokémon:
 
 1. **Encuentros aleatorios** — C++17, sin dependencias, agnóstico del motor
    (`include/` + `src/`, con GDExtension para Godot 4 en `godot/`).
 2. **Combate** — GDScript (Godot 4): tipos, físico/especial, escalado de stats,
    daño y curvas de nivel. Ver [`godot/combat_system/`](godot/combat_system/COMBAT.md).
+3. **Diálogos y cinemáticas** — GDScript (Godot 4): diálogos con decisiones que
+   disparan acciones, y un *sequencer* de cinemáticas con `await`. Modular y
+   desacoplado (EventBus / GameActions / Flags). Ver
+   [`godot/narrative_system/`](godot/narrative_system/NARRATIVE.md).
 
 ---
 
@@ -134,3 +138,30 @@ independiente (GDScript puro, sin la GDExtension). Cubre:
   ejemplo en `godot/combat_system/data/moves/`.
 
 Detalle completo y fórmulas en [`godot/combat_system/COMBAT.md`](godot/combat_system/COMBAT.md).
+
+---
+
+## 3) Diálogos y cinemáticas (GDScript / Godot 4)
+
+Carpeta [`godot/narrative_system/`](godot/narrative_system/) — proyecto Godot 4.3
+independiente, GDScript puro. Todo gira en torno a 5 autoloads que mantienen los
+sistemas **desacoplados**: `EventBus` (señales globales + canal genérico),
+`Flags` (estado), `GameActions` (registro `id → Callable`), `DialogueManager`,
+`CutsceneManager`.
+
+- **Diálogos con decisión:** `DialogueData` → `DialogueLine` → `DialogueChoice`
+  (todos `Resource`). Cada opción lleva `actions: Array[GameAction]` y una rama
+  `next`. Acciones listas: emitir evento, llamar acción registrada (async),
+  activar flag, abrir tienda, curar equipo, teletransportar (Vuelo), lanzar otra
+  cinemática/diálogo. "Rechazar" = opción sin acciones.
+- **Sequencer de cinemáticas:** `Cutscene` → `Array[CutsceneStep]`. El
+  `CutsceneManager` hace `await step.run(ctx)` en orden. Pasos: mover actor,
+  mover/zoom cámara, animación, **diálogo con espera de respuesta**, acción,
+  emitir evento, bifurcación (`StepBranch`) y paralelo (`StepParallel`).
+- **Interacción en el mundo:** `Interactable` (`Area2D`, se le arrastra un
+  diálogo o cinemática) + `Interactor` (en el jugador).
+- **UI incluida y reemplazable:** `DialogueUI` se auto-registra; puedes poner la
+  tuya con `DialogueManager.register_ui()`. Sin UI, el diálogo se resuelve solo.
+
+Estructura de nodos, flujo y guía de extensión en
+[`godot/narrative_system/NARRATIVE.md`](godot/narrative_system/NARRATIVE.md).

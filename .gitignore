@@ -10,6 +10,11 @@ godot/demo_project/bin/*.so
 godot/demo_project/bin/*.dylib
 godot/demo_project/bin/*.framework/
 godot/.sconsign.dblite
+
+# Godot editor artefactos
+.godot/
+*.import
+export_presets.cfg
 *.os
 *.obj
 *.o
